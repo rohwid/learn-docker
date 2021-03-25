@@ -202,3 +202,29 @@ Maka akan muncul pemberitahuan kalau aplikasi atau `app1` yang sudah dideploy su
     $ docker container ls --all
 
 Untuk selanjutnya maka dapat dijalankan kemmbali dengan perintahh seperti pada penjelasan `1. Buat Container Terlebih Dahulu dan Jalankan Container Tersebut`.
+
+## Upload Image ke Registry
+
+Pada website [Docker Hub](https://hub.docker.com/) kemudian pilih `Create Repository`, maka kemudian akan muncul sebuah perintah untuk melakukan push images ke [Docker Hub](https://hub.docker.com/) sebagai berikut:
+
+    $ docker push new-repo/image-name:tagname
+
+Contohnya
+
+    $ docker push rohwid/app-node:1.0
+
+Tetapi image yang dibuat hanya bernama `app-node` dengan tag `1.0` atau `app-node:1.0`, maka dari itu perlu dilakukan konversi dengan menggunakan perintah berikut:
+
+    $ docker tag local-image:tagname new-repo:tagname
+    
+    $ docker push new-repo:tagname
+
+Contohnya
+
+    $ docker tag app-node:1.0 rohwid/app-node:1.0
+
+    $ docker push rohwid/app-node:1.0
+
+Jika proses push gagal maka penyebabnya biasanya adalah dikarenakan docker mengharuskan penggunanya untuk login dengan perintah berikut:
+
+    $ docker login
