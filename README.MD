@@ -1,4 +1,4 @@
-# Teentang Docker
+# Tentang Docker
 
 Digunakan untuk deploy aplikasi ke server dengan melakukan bundling seluruh dependency yang dibutuhkan oleh aplikasi tersebut. Docker adalah container manager bukan virtual machine, sedanggkan pada VM biasanya disebut dengan VM manager. Dalam VM biasanya berisi OS, App dependency, dan Aplikasinya, sedangan pada Docker atau Container Manager tidak memiliki OS. Nah lantas dari mana OS yang akan digunakan oleh Container Manager, OS yang digunakan diperoleh dari OS induk dari Container Manager yang dibuat dengan cara isolate, sehingga tidak akan merusak OS induk.
 
@@ -167,7 +167,7 @@ Pada awalnya siapkan sebuah project yang nantinya akan digunakan untuk proses de
 
 Contohnya
 
-    $ docker build app-node:1.0
+    $ docker build app-node:1.0 .
 
 Kemudian lakukan pengecekkan apakah aplikasi tersebut sudah ada dalam list image:
 
@@ -201,7 +201,37 @@ Maka akan muncul pemberitahuan kalau aplikasi atau `app1` yang sudah dideploy su
 
     $ docker container ls --all
 
-Untuk selanjutnya maka dapat dijalankan kemmbali dengan perintahh seperti pada penjelasan `1. Buat Container Terlebih Dahulu dan Jalankan Container Tersebut`.
+Kemudian dengan penambahan flag `detach` maka aplikasi akan langsung berjalan sebagai container tanpa perlu melakukan perintah `start` terhadap container yang baru saja dibuat:
+
+    $ docker run --name app1 --publish 8080:8080 --detach app-node:1.0
+
+Maka aplikasi `app1` yang sudah dideploy sudah berjalan sebagai container karena penggunaan flag `--detach`. Selanjutnya dapat dilakukan pengecekan pada browser di alamat `http://localhost:8080` dan pengecekan dengan perintah:
+
+    $ docker container ls --all
+
+### 3. Penambahan Flag `--rm`
+
+Dengan adanya penambahan flag `--rm` maka setelah container tersebut berjalan lalu kemudian di hentikan dengan perintah `docker container stop` atau jika komputer induk mati yang mengakibatkan service docker berhenti. Maka container yang baru saja dibuat akan langsung terhapus secara otomatis. Berikut adalah contoh pembuatan container dengan flag `--rm`:
+
+    $ docker run --name app1 --rm --publish 8080:8080 --detach app-node:1.0
+
+## Pengaksesan TTY pada Container
+
+Dalam pengaksesan terminal session atau TTY dapat dilakukan secara langsung setelah container dibuat, pada contoh ini digunakan image dari `python:3.8-slim`:
+
+    $ docker run --name python-3.8-env --interactive --tty --publish 8080:8080 python:3.8-slim /bin/bash
+
+Contohnya:
+
+    $ docker run --name python-3.8-env --interactive --tty --publish 8080:8080 python:3.8-slim /bin/bash
+
+Maka setelah container tersebut berhasil dibuat, akan langsung masuk menuju ke dalam terminal session atau TTY dari container tersebut. Sedangkan untuk keluar dari session atau TTY dari container tersebut maka cukup dengan menggunakan perintah `exit`. Setelah keluar dari session tersebut container akan terus berjalan, dan untuk mengaksesnya kembali dapat digunakan perintah berikut:
+
+    $ docker exec --interactive --tty <container name atau id> /bin/bash
+
+Contohnya:
+
+    $ docker exec --interactive --tty python-3.8-env /bin/bash
 
 ## Upload Image ke Registry
 
