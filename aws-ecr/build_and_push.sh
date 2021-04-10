@@ -8,7 +8,7 @@ region=$(aws configure get region)
 echo "[DEBUG] AWS region: " ${region}
 
 reponame="ner-project"
-version="0.0.1"
+version="0.0.2"
 publish_port="8080"
 local_port="8080"
 
@@ -16,12 +16,12 @@ fullname="${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${reponame}:${versio
 echo "[DEBUG] Image name: " ${fullname}
 
 # Build the docker image
-docker build --tag ${reponame}:${version} .
+docker build --tag ${fullname} .
 
 read -n1 -r -p "Run the image localy. press ENTER to continue!" ENTER
 
 # Run the docker image localy
-docker run --name ${reponame} --publish ${publish_port}:${local_port} --detach ${reponame}:${version}
+docker run --name ${reponame} --publish ${publish_port}:${local_port} --detach ${fullname}
 
 read -n1 -r -p "Push the image to the ECR. press ENTER to continue!" ENTER
 
