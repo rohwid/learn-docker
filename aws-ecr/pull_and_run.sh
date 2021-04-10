@@ -15,8 +15,8 @@ local_port="8080"
 fullname="${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${reponame}:${version}"
 echo "[DEBUG] Image name: " ${fullname}
 
-# Run the docker image localy
+# Pull the docker image
 sudo docker pull ${fullname}
 
-# Run the docker image localy
+# Run the docker container
 sudo docker run --name ${reponame} --publish ${publish_port}:${local_port} --detach ${fullname}
