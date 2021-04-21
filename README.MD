@@ -315,6 +315,11 @@ Jika diperlukan restart, maka lakukan restart agar setiap container yang sebelum
 
 Dalam melakukan konfigurasi perlu melakukan konfigurasi dalam file `*.yaml`. Kemudian urutan eksekusi dari file konfiguras dalam format `*.yaml` tersebut dieksekusi dari atas ke bawah. Dalam file biasanya dimuat konfigurasi dari setiap image dan container yang akan dijalankan, environent variable, networks, dan lain sebagainya.
 
+Kemudian dalam file `*.yaml` tersebut terdapat banyak attribut seperti `container_name`, `image`, `ports` dan lain-lain. Atribut-atribut tersebut biasa digunakan pada perinntah saat pengoperasian image atau container, namun pada bagian ini akan dijelaskan attribut yang tidak biasa digunakan dalam pengoperasian container atau images. Misalnya
+
++ `depens_on`: Urutan container mana yang harus dieksekusi terlebih dahulu sebelum container lain atau container utama.
++ `environment`: Enviroment variable yang akan diterapkan pada sistem operasi yang dijalankan oleh docker container. 
+
 Selanjutnya gunakan perintah berikut untuk menjalankan script dan deploy seluruh container beserta konfigursinya yang terdapat dalam file `*.yaml` tersebut.
 
     $ docker-compose up
