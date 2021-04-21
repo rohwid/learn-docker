@@ -258,3 +258,79 @@ Contohnya
 Jika proses push gagal maka penyebabnya biasanya adalah dikarenakan docker mengharuskan penggunanya untuk login dengan perintah berikut:
 
     $ docker login
+
+##  Environment Variable pada Docker
+
+Konfigurasi yang baik itu adalah konfigursi yang bisa diset dari luar bundle atau docker images, misal seperti `username` dan `password` yang selalu berubah-ubah. Dalam mengatasi hal tersebut maka jangan melakukan hardcode didalam apllikasinya, melainkan **lakukan export kedalam environment variable**. Selanjutnya kita coba membuat docker image yang support enviroment variable. Berikut adalah environment variable yang akan digunakan:
+
+    USERNAME=${UNAME}
+
+Penambahan environment variable dapat dilakukan dengan menambahkan `flag` saat pembuatan container seperti perintah berikut ini.
+
+    $ docker container create --name app-node --publish 8080:8080 --env USERNAME=docker app-node:1.0
+
+Kemudian untuk melihat apakah environement pada container tersebut sudah berhasi terpasang, maka dapat dilakukan pengecekan dengan perintah berikut pada bagain `Environment`:
+
+    $ docker container inspect app-node
+
+Selanjutnya jika ingin menambah jumlah environment, maka cukup hanya dengan melakukan penambahan perintah, sebagaimana perintah berikut:
+
+    $ docker container create --name app-node --publish 8080:8080 --env USERNAME=docker --env DIR=/home/rohwid/app-node app-node:1.0
+
+## Integrasi Container dengan Network
+
+Dalam kasus ini diambil contoh saat implementasi database `MongoDB` dan `Redist`. Tentuunya hal tersebut memmerlukan Environment juuga untuk menjalankan databaset, maka secara otomatis jumlah Container dari docker yang akan digunakan berjumlah 3 yaitu MongoDB, Redis, dan Image dari Container itu sendiri.
+
+Setup Network yang akan menghubungkan setiap Container, hal ini diperlukan karena dari setiap container tersebut pada dasarnya adalah berdiri secara stand-alone dan tidak berkomunikasi satu dengan yang lain:
+
+    $ docker network create app-node
+
+Pertama buat container untuk masing-masing database dan aplikasi yang ingin dijalankan.
+
++ MongoDB (Image ambil dari docker hub):
+
+    $ docker container create --name mongo --publish 27017:27017 mongo:4-xenial
+
++ Redis (Image ambil dari docker hub):
+
+    $ docker container create --name redis --publish 6379:6379 redis:5
+
++ Aplikasi utama (Tambahkan juga environment variable untuk):
+
+    $ docker container create --name app-node --publish 8080:8080 --env NAME=docker --env MONGO_HOST=mongo --env MONGO_PORT=27017 --env REDIS_HOST=redis --env REDIS_PORT=6379 app-node:1.0
+
+Kemudian langkah selanjutnya adalah masukan setiap container tersebut ke dalam Docker Network yang sebelumnya dibuat.
+
+    $ docker network connect mongo
+    $ docker network connect redis
+    $ docker network connect app-node
+
+Selanjutnya lakukan pengecekan pada setiap container yang dibuat, apakah sudah masuk ke dalam Docker Network dengan perintah berikut pada bagian `Networks`:
+
+    $ docker container inspect java-docker
+
+Jika diperlukan restart, maka lakukan restart agar setiap container yang sebelumnya dibuat dapat terhubung kembali.
+
+## Integrasi Banyak Container dengan Docker Compose
+
+Dalam melakukan konfigurasi perlu melakukan konfigurasi dalam file `*.yaml`. Kemudian urutan eksekusi dari file konfiguras dalam format `*.yaml` tersebut dieksekusi dari atas ke bawah. Dalam file biasanya dimuat konfigurasi dari setiap image dan container yang akan dijalankan, environent variable, networks, dan lain sebagainya.
+
+Selanjutnya gunakan perintah berikut untuk menjalankan script dan deploy seluruh container beserta konfigursinya yang terdapat dalam file `*.yaml` tersebut.
+
+    $ docker-compose up
+
+Jika ingin menjalankannya dalam backgroud maka dapat ditambah dengan flag `--detach`.
+
+    $ docker-compose up --detach
+
+Jika ingin menghentikan container tersebut maka dapat menggunakan perintah:
+
+    $ docker-compose stop
+
+Dan untuk menjalankannya kembali dengan perintah:
+
+    $ docker-compose start
+
+Sedangkan untuk menghentikan dan menghapus seluruh container beserta isinya, dapat dengan perintah berikut.
+
+    $ docker-compose down
