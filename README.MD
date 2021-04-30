@@ -163,11 +163,11 @@ Barulah penghapusan images dapat dilakukan:
 
 Pada awalnya siapkan sebuah project yang nantinya akan digunakan untuk proses deployment, misal ini adalah project ini dicontohkan pemakaian Nodejs dalam file `server.js` untuk program utama, `package.json` dan `package-lock.json` untuk konfigurasi *dependency* dari program tersebut. Dalam pembuatan image docker menggunakan `Dockerfile` ini tidak dibuat dari awal, melainkan menggunakan image yang sudah ada di [Docker Hub](https://hub.docker.com/). Hasil untuk script Dockerfile yang baru saja dibuat hasilnya terdapat pada file `Dockerfile`. Jika sudah selesai maka lakukan eksekusi pembuatan docker image menggunakan `Dockerfile` dengan perintah berikut:
 
-    $ docker build <image-name>:<tag> .
+    $ docker build --tag <image-name>:<tag> .
 
 Contohnya
 
-    $ docker build app-node:1.0 .
+    $ docker build --tag app-node:1.0 .
 
 Kemudian lakukan pengecekkan apakah aplikasi tersebut sudah ada dalam list image:
 
