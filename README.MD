@@ -219,11 +219,11 @@ Dengan adanya penambahan flag `--rm` maka setelah container tersebut berjalan la
 
 Dalam pengaksesan terminal session atau TTY dapat dilakukan secara langsung setelah container dibuat, pada contoh ini digunakan image dari `python:3.8-slim`:
 
-    $ docker run --name python-3.8-env --interactive --tty --publish 8080:8080 python:3.8-slim /bin/bash
+    $ docker run --name app1 --interactive --tty --publish 8080:8080 app-node:1.0
 
 Contohnya:
 
-    $ docker run --name python-3.8-env --interactive --tty --publish 8080:8080 python:3.8-slim /bin/bash
+    $ docker run --name app1 --interactive --tty --publish 8080:8080 app-node:1.0
 
 Maka setelah container tersebut berhasil dibuat, akan langsung masuk menuju ke dalam terminal session atau TTY dari container tersebut. Sedangkan untuk keluar dari session atau TTY dari container tersebut maka cukup dengan menggunakan perintah `exit`. Setelah keluar dari session tersebut container akan terus berjalan, dan untuk mengaksesnya kembali dapat digunakan perintah berikut:
 
@@ -283,7 +283,7 @@ Dalam kasus ini diambil contoh saat implementasi database `MongoDB` dan `Redist`
 
 Setup Network yang akan menghubungkan setiap Container, hal ini diperlukan karena dari setiap container tersebut pada dasarnya adalah berdiri secara stand-alone dan tidak berkomunikasi satu dengan yang lain:
 
-    $ docker network create app-node
+    $ docker network create app-net
 
 Pertama buat container untuk masing-masing database dan aplikasi yang ingin dijalankan.
 
@@ -301,13 +301,13 @@ Pertama buat container untuk masing-masing database dan aplikasi yang ingin dija
 
 Kemudian langkah selanjutnya adalah masukan setiap container tersebut ke dalam Docker Network yang sebelumnya dibuat.
 
-    $ docker network connect mongo
-    $ docker network connect redis
-    $ docker network connect app-node
+    $ docker network connect app-net mongo
+    $ docker network connect app-net appredis
+    $ docker network connect app-net app-node
 
 Selanjutnya lakukan pengecekan pada setiap container yang dibuat, apakah sudah masuk ke dalam Docker Network dengan perintah berikut pada bagian `Networks`:
 
-    $ docker container inspect java-docker
+    $ docker container inspect app-node
 
 Jika diperlukan restart, maka lakukan restart agar setiap container yang sebelumnya dibuat dapat terhubung kembali.
 
