@@ -215,24 +215,6 @@ Dengan adanya penambahan flag `--rm` maka setelah container tersebut berjalan la
 
     $ docker run --name app1 --rm --publish 8080:8080 --detach app-node:1.0
 
-## Pengaksesan TTY pada Container
-
-Dalam pengaksesan terminal session atau TTY dapat dilakukan secara langsung setelah container dibuat, pada contoh ini digunakan image dari `python:3.8-slim`:
-
-    $ docker run --name app1 --interactive --tty --publish 8080:8080 app-node:1.0
-
-Contohnya:
-
-    $ docker run --name app1 --interactive --tty --publish 8080:8080 app-node:1.0
-
-Maka setelah container tersebut berhasil dibuat, akan langsung masuk menuju ke dalam terminal session atau TTY dari container tersebut. Sedangkan untuk keluar dari session atau TTY dari container tersebut maka cukup dengan menggunakan perintah `exit`. Setelah keluar dari session tersebut container akan terus berjalan, dan untuk mengaksesnya kembali dapat digunakan perintah berikut:
-
-    $ docker exec --interactive --tty <container name atau id> /bin/bash
-
-Contohnya:
-
-    $ docker exec --interactive --tty python-3.8-env /bin/bash
-
 ## Upload Image ke Registry
 
 Pada website [Docker Hub](https://hub.docker.com/) kemudian pilih `Create Repository`, maka kemudian akan muncul sebuah perintah untuk melakukan push images ke [Docker Hub](https://hub.docker.com/) sebagai berikut:
@@ -339,3 +321,45 @@ Dan untuk menjalankannya kembali dengan perintah:
 Sedangkan untuk menghentikan dan menghapus seluruh container beserta isinya, dapat dengan perintah berikut.
 
     $ docker-compose down
+
+## Manage Data dengan Docker
+
+Pada pembuatan aplikasi diusahakan semuanya dapat berjalan secara **stateless** atau tidak memerlukan penyimpanan data saat aplikasi berjalan atau **statefull**, namun lain halnya dengan database yang tentunya memerlukan penyimpanan. Dalam kasus ini dalam proses manage data terdapat beberapa fitur yang dapat digunakan diantaranya adalah `Volume` yang membuat docker memiliki penyimpanan sendiri dan dapat melakukan fitur sepert `Backup`, `Restore`, atau `Migrate`. Selanjutnya terdapat fitur `Bind mounts` yang dapat menghubungkan antara directory local pada komputer induk atau `host` dengan directory pada container, maka hal tersebut memungkinkan saat dihapusnya container maka file atau data dalam folder pada komputer induk tidak akan hilang. Berikut adalah langkah pembuatan `volume`:
+
+Lakukan pembuatan `volume` dengan perintah (dengan kasus mongoDB):
+
+    $ docker volume create mongo_data
+
+Kemudian lanjutkan dengan pembuatan container dan hubungkan dengan `volume`:
+
+    $ docker container create --name mongodb --volume mongo_data:/data/db --publish 5432:5432 mongo:4-xenial
+
+Directory `/data/db` tersebut adalah tempat data base dari mongoDB disimpan. Saat container itu dihapus, maka data akan tertap tersimpan dalam `volume`. 
+
+    $ docker container rm mongodb
+
+Saat dilakukan pembuatan ulang container dengan menggunakan `volume` yang sama, maka secara otomatis data tersebut dapat diakses dari container baru tersebut.  
+
+    $ docker container create --name mongodb --volume mongo_data:/data/db --publish 5432:5432 mongo:4-xenial
+
+Sedangkan untuk `Bind mount` hanya cukup dengan mengganti `volume` dengan `local directory`.
+
+    $ docker container create --name mongodb --volume /home/ubuntu/mongo_data:/data/db --publish 5432:5432 mongo:4-xenial
+
+## Pengaksesan TTY pada Container
+
+Dalam pengaksesan terminal session atau TTY dapat dilakukan secara langsung setelah container dibuat, pada contoh ini digunakan image dari `python:3.8-slim-buster`:
+
+    $ docker run --name app2 --interactive --tty --publish 8080:8080 python:3.8-slim-buster
+
+Contohnya:
+
+    $ docker run --name app2 --interactive --tty --publish 8080:8080 python:3.8-slim-buster
+
+Maka setelah container tersebut berhasil dibuat, akan langsung masuk menuju ke dalam terminal session atau TTY dari container tersebut. Sedangkan untuk keluar dari session atau TTY dari container tersebut maka cukup dengan menggunakan perintah `exit`. Setelah keluar dari session tersebut container akan terus berjalan, dan untuk mengaksesnya kembali dapat digunakan perintah berikut:
+
+    $ docker exec --interactive --tty <container name atau id> /bin/bash
+
+Contohnya:
+
+    $ docker exec --interactive --tty python-3.8-env /bin/bash
