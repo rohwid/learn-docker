@@ -363,3 +363,23 @@ Maka setelah container tersebut berhasil dibuat, akan langsung masuk menuju ke d
 Contohnya:
 
     $ docker exec --interactive --tty python-3.8-env /bin/bash
+
+## Membersihkan Sampah
+
+Dalam membersihkan Image, Network, Volume dan Container yang tidak berjalan dapat dengan menggunakan perintah `prune`.
+
+Misalkan dalam Image dengan menggunakan perintah berikut, maka yang dihapus adalah image yang bersifat `dangling` saja.
+
+    $ docker image prune
+
+Sedangkan untuk mengahapus semua image yang tidak terpakai oleh container yang berjalan maka dapat menggunakan perintah berikut:
+
+    $ docker image prune --all
+
+Hal ini juga berlaku untuk Network, Volume dan Container sebagaimana perintah berikut:
+
+    $ docker network prune
+
+    $ docker volume prune
+
+    $ docker container prune
