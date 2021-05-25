@@ -383,3 +383,4 @@ Hal ini juga berlaku untuk Network, Volume dan Container sebagaimana perintah be
     $ docker volume prune
 
     $ docker container prune
+
