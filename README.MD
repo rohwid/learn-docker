@@ -364,6 +364,14 @@ Contohnya:
 
     $ docker exec --interactive --tty python-3.8-env /bin/bash
 
+Atau ingin memjalankan image dan mengakses kedalam image tersebut maka dapat menggunakan perintah berikut:
+
+    $ docker run --interactive --tty python-3.8-slim-buster /bin/bash
+
+Tambahkan flag `--rm` jika ingin langsung menghapusnya setelah itu
+
+    $ docker run --interactive --tty python-3.8-slim-buster /bin/bash
+
 ## Membersihkan Sampah
 
 Dalam membersihkan Image, Network, Volume dan Container yang tidak berjalan dapat dengan menggunakan perintah `prune`.
