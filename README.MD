@@ -370,7 +370,7 @@ Atau ingin memjalankan image dan mengakses kedalam image tersebut maka dapat men
 
 Tambahkan flag `--rm` jika ingin langsung menghapusnya setelah itu
 
-    $ docker run --interactive --tty python-3.8-slim-buster /bin/bash
+    $ docker run --rm --interactive --tty python-3.8-slim-buster /bin/bash
 
 ## Membersihkan Sampah
 
