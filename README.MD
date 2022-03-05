@@ -372,6 +372,15 @@ Tambahkan flag `--rm` jika ingin langsung menghapusnya setelah itu
 
     $ docker run --rm --interactive --tty python-3.8-slim-buster /bin/bash
 
+Selain itu eksekusi dapat dilakukan secara langsung dengan menggunakan perintah exec dan program akan berjalan secara otomatis di dalam container, misalkan untuk eksekus script `train.py`:
+
+    $ docker exec --interacive --tty <container name atau id> python train.py
+
+Contohnya:
+
+    $ docker exec --interactive --tty iris-classification python train.py
+
+
 ## Membersihkan Sampah
 
 Dalam membersihkan Image, Network, Volume dan Container yang tidak berjalan dapat dengan menggunakan perintah `prune`.
