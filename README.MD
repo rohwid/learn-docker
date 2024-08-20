@@ -6,11 +6,15 @@ Digunakan untuk deploy aplikasi ke server dengan melakukan bundling seluruh depe
 
 Ikuti langkah-langkah installasi sesuai dengan dokumentasi, kemudian lanjutkan dengan pengecekan pada Terminal menggunakan perintah:
 
-    $ docker info
+```bash
+$ docker info
+```
 
 Apakah sudah dapat menampilkan info dari docker, bisa juga dengan perintah berikut untuk melakukan pengecekan server:
 
-    $ docker --version
+```bash
+$ docker --version
+```
 
 ## Docker Architecture
 
@@ -47,33 +51,47 @@ Berikut adalah contoh langkah-langkah dalam penggunaan docker.
 
 Melihat list image yang kita miliki dengan perintah berikut:
 
-    $ docker images
+```bash
+$ docker images
+```
 
 Kemudian buka `Docker hub` dan cari images yang ingin di download, misalkan contoh pada perintah berikut adalah mongodb:
 
-    $ docker pull mongo
+```bash
+$ docker pull mongo
+```
 
 Dengan perintah tersebut maka versi atau tags yang d gunakan secara default adalah `lates`. Jika kita ingin mendownload versi yang lain (contoh: v4.4.4), maka dapat menggunakan perintah berikut:
 
-    $ docker pull mongo:4.4.4
+```bash
+$ docker pull mongo:4.4.4
+```
 
 ## Membuat Container
 
 Menampilkan seluruh container yang sedang berjalan dapat dengan menggunakanan perintah berikut:
 
-    $ docker container ls
+```bash
+$ docker container ls
+```
 
 Sedangkan untuk melihat seluruh container, bahkan yang sedang tidak berjalan maka gunakan perintah berikut:
 
-    $ docker container ls --all
+```bash
+$ docker container ls --all
+```
 
 Gunakan perintah berikut untuk membuat container:
 
-    $ docker container create mongo:4.1
+```bash
+$ docker container create mongo:4.1
+```
 
 Namun perintah tersebut akan membuat random name untuk container. Maka dari itu gunakan perintah berikut dengan tambahkkan opsi `--name`:
 
-    $ docker container create --name mongoserver1 mongo:4.4.4
+```bash
+$ docker container create --name mongoserver1 mongo:4.4.4
+```
 
 **Note:** Nama disini bersifat unik dan tidak bisa disamakan.
 
@@ -81,11 +99,15 @@ Namun perintah tersebut akan membuat random name untuk container. Maka dari itu 
 
 Untuk menjalanlan container dapat menggunakan perintah berikut, dicontohkkan dengan nama container yang sebelumnya dibuat:
 
-    $ docker container start mongoserver1
+```bash
+$ docker container start mongoserver1
+```
 
 Kemudian gunakan perintah sebelumnya untuk melihat apakah container tersebut sudah berjalan:
 
-    $ docker container ls
+```bash
+$ docker container ls
+```
 
 Kemudian coba akses mongodb tersebut (dapat mengguunakan Studi 3T atau cara yang lain) pada alamat `localhost:27017`. Tetapi hal ini gagal dilakukkan karena pada dasarnya port yang diekspose oleh mongoDB tersebut adalah port pada tingkat containernya saja. **Jadi pastikan saat menjalankan container lakukan juga expose port pada container yang ingin dijalankan**.
 
@@ -93,29 +115,41 @@ Kemudian coba akses mongodb tersebut (dapat mengguunakan Studi 3T atau cara yang
 
 Kemudian terdapat cara untuk menghapus container dengan perintah:
 
-    $ docker container rm mongoserver1
+```bash
+$ docker container rm mongoserver1
+```
 
 Namun hal ini masih belum dapat dilakukan dikarenakan container tersebut masuh berjalan, maka stop dulu container yang sedang berjalan dengan perintah berikut:
 
-    $ docker container stop mongoserver1
+```bash
+$ docker container stop mongoserver1
+```
 
 Dapat juga melakukan stop untuk dua container sekaligus dengan perintah berikut:
 
-    $ docker container stop mongoserver1 mongoserver2
+```bash
+$ docker container stop mongoserver1 mongoserver2
+```
 
 Kemudian baru lakukan penghapusan terhadap dua container tersebut:
 
-    $ docker container rm mongoserver1 mongoserver2
+```bash
+$ docker container rm mongoserver1 mongoserver2
+```
 
 ## Membuka atau Expose Port untuk Container
 
 Gunakan perintah berikut untuk membuat container sekaligus melakukan expose pada port tersebut:
 
-    $ docker container create --name mongoserver1 -p 8080:27017 mongo:4.4.4
+```bash
+$ docker container create --name mongoserver1 -p 8080:27017 mongo:4.4.4
+```
 
 Yang mana port `8080` adalah port eksternal yang diekspose, dan `27017` adalah port lokal atau container dari mongodb. Kemudian jika ingin menambahkan 1 container mongodb lagi maka dapat menjalankan perintah berikut:
 
-    $ docker container create --name mongoserver2 -p 8181:27017 mongo:4.4.4
+```bash
+$ docker container create --name mongoserver2 -p 8181:27017 mongo:4.4.4
+```
 
 Perlu diingat bahwa port `8080` dan `8181` adalah port dari komputer induk atau server sedangkan `27017` adalah port lokal dari container yang menjalankan mongodb.
 
@@ -123,55 +157,80 @@ Perlu diingat bahwa port `8080` dan `8181` adalah port dari komputer induk atau 
 
 Gunakan perintah berikut untuk melihat daftar images:
 
-    $ docker images
+```bash
+$ docker images
+```
 
 Selanjutnya hapus images yang ingin dipilih dengan perintah berikut:
 
-    $ docker image rm <image ID>
+```bash
+$ docker image rm <image ID>
+```
 
 Atau
 
-    $ docker image rm <repository>:<tag>
+```bash
+$ docker image rm <repository>:<tag>
+```
 
 Contoh
 
-    $ docker image rm bbfd3e575f12
+```bash
+$ docker image rm bbfd3e575f12
+```
 
 Atau
 
-    $ docker image rm mongo:4.4.4
+```bash
+$ docker image rm mongo:4.4.4
+```
 
 Tetapi kemudian muncul error yang menyatakan bahwa image tersebut tidak dapat dihapus selama masih digunakan oleh container, seperti pesan berikut:
 
-    Error response from daemon: conflict: unable to remove repository reference "mongo:4.4.4" (must force) - container 1f4129490fe3 is using its referenced image bbfd3e575f12
+```bash
+Error response from daemon: conflict: unable to remove repository reference "mongo:4.4.4" (must force) - container 1f4129490fe3 is using its referenced image bbfd3e575f12
+```
 
 Maka dari itu container yang dibuat sebelumnya harus dihapus terlebih dahulu, hal ini dapat diasumsikan bahwa image adalah bukan installer yang dapat dihapus saat selesai installasi. Jadi dapat disimpulkan lagi, bahwa container adalah running images.
 
 Kemudian lanjutkan dengan stop container:
 
-    $ docker container stop mongoserver1 mongoserver2
+```bash
+$ docker container stop mongoserver1 mongoserver2
+```
 
 Lalu hapus container:
 
-    $ docker container rm mongoserver1 mongoserver2
+```bash
+$ docker container rm mongoserver1 mongoserver2
+```
 
 Barulah penghapusan images dapat dilakukan:
 
-    $ docker imager rm mongo:4.4.4
+```bash
+$ docker imager rm mongo:4.4.4
+```
 
 ## Membuat Image dengan Docker File
 
 Pada awalnya siapkan sebuah project yang nantinya akan digunakan untuk proses deployment, misal ini adalah project ini dicontohkan pemakaian Nodejs dalam file `server.js` untuk program utama, `package.json` dan `package-lock.json` untuk konfigurasi *dependency* dari program tersebut. Dalam pembuatan image docker menggunakan `Dockerfile` ini tidak dibuat dari awal, melainkan menggunakan image yang sudah ada di [Docker Hub](https://hub.docker.com/). Hasil untuk script Dockerfile yang baru saja dibuat hasilnya terdapat pada file `Dockerfile`. Jika sudah selesai maka lakukan eksekusi pembuatan docker image menggunakan `Dockerfile` dengan perintah berikut:
 
-    $ docker build --tag <image-name>:<tag> .
+
+```bash
+$ docker build --tag <image-name>:<tag> .
+```
 
 Contohnya
 
-    $ docker build --tag app-node:1.0 .
+```bash
+$ docker build --tag app-node:1.0 .
+```
 
 Kemudian lakukan pengecekkan apakah aplikasi tersebut sudah ada dalam list image:
 
-    $ docker images
+```bash
+$ docker images
+```
 
 Lanjutkan dengan pembuatan container. Pada kasus ini terdapat dua cara, yaitu:
 
@@ -179,15 +238,21 @@ Lanjutkan dengan pembuatan container. Pada kasus ini terdapat dua cara, yaitu:
 
 Buat container dengan menggunakan perintah berikut:
 
-    $ docker container create --name app1 --publish 3000:3000 app-node:1.0
+```bash
+$ docker container create --name app1 --publish 3000:3000 app-node:1.0
+```
 
 Kemudian cek dengan perintah:
 
-    $ docker container ls --all
+```bash
+$ docker container ls --all
+```
 
 Selanjutnya jalankan container tersebut dengan perintah berikut:
 
-    $ docker container start app1
+```bash
+$ docker container start app1
+```
 
 Lanjutkan dengan pengecekan pada browser di alamat `http://localhost:3000`.
 
@@ -195,69 +260,97 @@ Lanjutkan dengan pengecekan pada browser di alamat `http://localhost:3000`.
 
 Buat container sekaligus jalankan container tersebut dengan menggunakan perintah berikut:
 
-    $ docker run --name app1 --publish 3000:3000 app-node:1.0
+```bash
+$ docker run --name app1 --publish 3000:3000 app-node:1.0
+```
 
 Maka akan muncul pemberitahuan kalau aplikasi atau `app1` yang sudah dideploy sudah berjalan. Selanjutnya dapat dilakukan pengecekan pada browser di alamat `http://localhost:3000`. Kemudian jika aplikasi tersebut dihentikan dengan menekan tombol `CTRL + C` misal, maka aplikasi tersebut akan berhenti dan otomatis sudah muncul pada list docker container dengan perintah berikut:
 
-    $ docker container ls --all
+```bash
+$ docker container ls --all
+```
 
 Kemudian dengan penambahan flag `detach` maka aplikasi akan langsung berjalan sebagai container tanpa perlu melakukan perintah `start` terhadap container yang baru saja dibuat:
 
-    $ docker run --name app1 --publish 8080:8080 --detach app-node:1.0
+```bash
+$ docker run --name app1 --publish 8080:8080 --detach app-node:1.0
+```
 
 Maka aplikasi `app1` yang sudah dideploy sudah berjalan sebagai container karena penggunaan flag `--detach`. Selanjutnya dapat dilakukan pengecekan pada browser di alamat `http://localhost:8080` dan pengecekan dengan perintah:
 
-    $ docker container ls --all
+```bash
+$ docker container ls --all
+```
 
 ### 3. Penambahan Flag `--rm`
 
 Dengan adanya penambahan flag `--rm` maka setelah container tersebut berjalan lalu kemudian di hentikan dengan perintah `docker container stop` atau jika komputer induk mati yang mengakibatkan service docker berhenti. Maka container yang baru saja dibuat akan langsung terhapus secara otomatis. Berikut adalah contoh pembuatan container dengan flag `--rm`:
 
-    $ docker run --name app1 --rm --publish 8080:8080 --detach app-node:1.0
+```bash
+$ docker run --name app1 --rm --publish 8080:8080 --detach app-node:1.0
+```
 
 ## Upload Image ke Registry
 
 Pada website [Docker Hub](https://hub.docker.com/) kemudian pilih `Create Repository`, maka kemudian akan muncul sebuah perintah untuk melakukan push images ke [Docker Hub](https://hub.docker.com/) sebagai berikut:
 
-    $ docker push new-repo/image-name:tagname
+```bash
+$ docker push new-repo/image-name:tagname
+```
 
-Contohnya
+Contohnya:
 
-    $ docker push rohwid/app-node:1.0
+```bash
+$ docker push rohwid/app-node:1.0
+```
 
 Tetapi image yang dibuat hanya bernama `app-node` dengan tag `1.0` atau `app-node:1.0`, maka dari itu perlu dilakukan konversi dengan menggunakan perintah berikut:
 
-    $ docker tag local-image:tagname new-repo:tagname
-    
-    $ docker push new-repo:tagname
+```bash
+$ docker tag local-image:tagname new-repo:tagname
+
+$ docker push new-repo:tagname
+```
 
 Contohnya
 
-    $ docker tag app-node:1.0 rohwid/app-node:1.0
+```bash
+$ docker tag app-node:1.0 rohwid/app-node:1.0
 
-    $ docker push rohwid/app-node:1.0
+$ docker push rohwid/app-node:1.0
+```
 
 Jika proses push gagal maka penyebabnya biasanya adalah dikarenakan docker mengharuskan penggunanya untuk login dengan perintah berikut:
 
-    $ docker login
+```bash
+$ docker login
+```
 
 ##  Environment Variable pada Docker
 
 Konfigurasi yang baik itu adalah konfigursi yang bisa diset dari luar bundle atau docker images, misal seperti `username` dan `password` yang selalu berubah-ubah. Dalam mengatasi hal tersebut maka jangan melakukan hardcode didalam apllikasinya, melainkan **lakukan export kedalam environment variable**. Selanjutnya kita coba membuat docker image yang support enviroment variable. Berikut adalah environment variable yang akan digunakan:
 
-    USERNAME=${UNAME}
+```bash
+USERNAME=${UNAME}
+```
 
 Penambahan environment variable dapat dilakukan dengan menambahkan `flag` saat pembuatan container seperti perintah berikut ini.
 
-    $ docker container create --name app-node --publish 8080:8080 --env USERNAME=docker app-node:1.0
+```bash
+$ docker container create --name app-node --publish 8080:8080 --env USERNAME=docker app-node:1.0
+```
 
 Kemudian untuk melihat apakah environement pada container tersebut sudah berhasi terpasang, maka dapat dilakukan pengecekan dengan perintah berikut pada bagain `Environment`:
 
-    $ docker container inspect app-node
+```bash
+$ docker container inspect app-node
+```
 
 Selanjutnya jika ingin menambah jumlah environment, maka cukup hanya dengan melakukan penambahan perintah, sebagaimana perintah berikut:
 
-    $ docker container create --name app-node --publish 8080:8080 --env USERNAME=docker --env DIR=/home/rohwid/app-node app-node:1.0
+```bash
+$ docker container create --name app-node --publish 8080:8080 --env USERNAME=docker --env DIR=/home/rohwid/app-node app-node:1.0
+```
 
 ## Integrasi Container dengan Network
 
@@ -265,31 +358,43 @@ Dalam kasus ini diambil contoh saat implementasi database `MongoDB` dan `Redist`
 
 Setup Network yang akan menghubungkan setiap Container, hal ini diperlukan karena dari setiap container tersebut pada dasarnya adalah berdiri secara stand-alone dan tidak berkomunikasi satu dengan yang lain:
 
-    $ docker network create app-net
+```bash
+$ docker network create app-net
+```
 
 Pertama buat container untuk masing-masing database dan aplikasi yang ingin dijalankan.
 
 + MongoDB (Image ambil dari docker hub):
 
-    $ docker container create --name mongo --publish 27017:27017 mongo:4-xenial
+```bash
+$ docker container create --name mongo --publish 27017:27017 mongo:4-xenial
+```
 
 + Redis (Image ambil dari docker hub):
 
-    $ docker container create --name redis --publish 6379:6379 redis:5
+```bash
+$ docker container create --name redis --publish 6379:6379 redis:5
+```
 
 + Aplikasi utama (Tambahkan juga environment variable untuk):
 
-    $ docker container create --name app-node --publish 8080:8080 --env NAME=docker --env MONGO_HOST=mongo --env MONGO_PORT=27017 --env REDIS_HOST=redis --env REDIS_PORT=6379 app-node:1.0
+```bash
+$ docker container create --name app-node --publish 8080:8080 --env NAME=docker --env MONGO_HOST=mongo --env MONGO_PORT=27017 --env REDIS_HOST=redis --env REDIS_PORT=6379 app-node:1.0
+```
 
 Kemudian langkah selanjutnya adalah masukan setiap container tersebut ke dalam Docker Network yang sebelumnya dibuat.
 
-    $ docker network connect app-net mongo
-    $ docker network connect app-net appredis
-    $ docker network connect app-net app-node
+```bash
+$ docker network connect app-net mongo
+$ docker network connect app-net appredis
+$ docker network connect app-net app-node
+```
 
 Selanjutnya lakukan pengecekan pada setiap container yang dibuat, apakah sudah masuk ke dalam Docker Network dengan perintah berikut pada bagian `Networks`:
 
-    $ docker container inspect app-node
+```bash
+$ docker container inspect app-node
+```
 
 Jika diperlukan restart, maka lakukan restart agar setiap container yang sebelumnya dibuat dapat terhubung kembali.
 
@@ -304,23 +409,33 @@ Kemudian dalam file `*.yaml` tersebut terdapat banyak attribut seperti `containe
 
 Selanjutnya gunakan perintah berikut untuk menjalankan script dan deploy seluruh container beserta konfigursinya yang terdapat dalam file `*.yaml` tersebut.
 
-    $ docker-compose up
+```bash
+$ docker-compose up
+```
 
 Jika ingin menjalankannya dalam backgroud maka dapat ditambah dengan flag `--detach`.
 
-    $ docker-compose up --detach
+```bash
+$ docker-compose up --detach
+```
 
 Jika ingin menghentikan container tersebut maka dapat menggunakan perintah:
 
-    $ docker-compose stop
+```bash
+$ docker-compose stop
+```
 
 Dan untuk menjalankannya kembali dengan perintah:
 
-    $ docker-compose start
+```bash
+$ docker-compose start
+```
 
 Sedangkan untuk menghentikan dan menghapus seluruh container beserta isinya, dapat dengan perintah berikut.
 
-    $ docker-compose down
+```bash
+$ docker-compose down
+```
 
 ## Manage Data dengan Docker
 
@@ -328,57 +443,83 @@ Pada pembuatan aplikasi diusahakan semuanya dapat berjalan secara **stateless** 
 
 Lakukan pembuatan `volume` dengan perintah (dengan kasus mongoDB):
 
-    $ docker volume create mongo_data
+```bash
+$ docker volume create mongo_data
+```
 
 Kemudian lanjutkan dengan pembuatan container dan hubungkan dengan `volume`:
 
-    $ docker container create --name mongodb --volume mongo_data:/data/db --publish 5432:5432 mongo:4-xenial
+```bash
+$ docker container create --name mongodb --volume mongo_data:/data/db --publish 5432:5432 mongo:4-xenial
+```
 
 Directory `/data/db` tersebut adalah tempat data base dari mongoDB disimpan. Saat container itu dihapus, maka data akan tertap tersimpan dalam `volume`. 
 
-    $ docker container rm mongodb
+```bash
+$ docker container rm mongodb
+```
 
 Saat dilakukan pembuatan ulang container dengan menggunakan `volume` yang sama, maka secara otomatis data tersebut dapat diakses dari container baru tersebut.  
 
-    $ docker container create --name mongodb --volume mongo_data:/data/db --publish 5432:5432 mongo:4-xenial
+```bash
+$ docker container create --name mongodb --volume mongo_data:/data/db --publish 5432:5432 mongo:4-xenial
+```
 
 Sedangkan untuk `Bind mount` hanya cukup dengan mengganti `volume` dengan `local directory`.
 
-    $ docker container create --name mongodb --volume /home/ubuntu/mongo_data:/data/db --publish 5432:5432 mongo:4-xenial
+```bash
+$ docker container create --name mongodb --volume /home/ubuntu/mongo_data:/data/db --publish 5432:5432 mongo:4-xenial
+```
 
 ## Pengaksesan TTY pada Container
 
 Dalam pengaksesan terminal session atau TTY dapat dilakukan secara langsung setelah container dibuat, pada contoh ini digunakan image dari `python:3.8-slim-buster`:
 
-    $ docker run --name app2 --interactive --tty --publish 8080:8080 python:3.8-slim-buster
+```bash
+$ docker run --name app2 --interactive --tty --publish 8080:8080 python:3.8-slim-buster
+```
 
 Contohnya:
 
-    $ docker run --name app2 --interactive --tty --publish 8080:8080 python:3.8-slim-buster
+```bash
+$ docker run --name app2 --interactive --tty --publish 8080:8080 python:3.8-slim-buster
+```
 
 Maka setelah container tersebut berhasil dibuat, akan langsung masuk menuju ke dalam terminal session atau TTY dari container tersebut. Sedangkan untuk keluar dari session atau TTY dari container tersebut maka cukup dengan menggunakan perintah `exit`. Setelah keluar dari session tersebut container akan terus berjalan, dan untuk mengaksesnya kembali dapat digunakan perintah berikut:
 
-    $ docker exec --interactive --tty <container name atau id> /bin/bash
+```bash
+$ docker exec --interactive --tty <container name atau id> /bin/bash
+```
 
 Contohnya:
 
-    $ docker exec --interactive --tty python-3.8-env /bin/bash
+```bash
+$ docker exec --interactive --tty python-3.8-env /bin/bash
+```
 
 Atau ingin memjalankan image dan mengakses kedalam image tersebut maka dapat menggunakan perintah berikut:
 
-    $ docker run --interactive --tty python-3.8-slim-buster /bin/bash
+```bash
+$ docker run --interactive --tty python-3.8-slim-buster /bin/bash
+```
 
 Tambahkan flag `--rm` jika ingin langsung menghapusnya setelah itu
 
-    $ docker run --rm --interactive --tty python-3.8-slim-buster /bin/bash
+```bash
+$ docker run --rm --interactive --tty python-3.8-slim-buster /bin/bash
+```
 
 Selain itu eksekusi dapat dilakukan secara langsung dengan menggunakan perintah exec dan program akan berjalan secara otomatis di dalam container, misalkan untuk eksekus script `train.py`:
 
-    $ docker exec --interacive --tty <container name atau id> python train.py
+```bash
+$ docker exec --interacive --tty <container name atau id> python train.py
+```
 
 Contohnya:
 
-    $ docker exec --interactive --tty iris-classification python train.py
+```bash
+$ docker exec --interactive --tty iris-classification python train.py
+```
 
 
 ## Membersihkan Sampah
@@ -387,17 +528,28 @@ Dalam membersihkan Image, Network, Volume dan Container yang tidak berjalan dapa
 
 Misalkan dalam Image dengan menggunakan perintah berikut, maka yang dihapus adalah image yang bersifat `dangling` saja.
 
-    $ docker image prune
+```bash
+$ docker image prune
+```
 
 Sedangkan untuk mengahapus semua image yang tidak terpakai oleh container yang berjalan maka dapat menggunakan perintah berikut:
 
-    $ docker image prune --all
+```bash
+$ docker image prune --all
+```
 
 Hal ini juga berlaku untuk Network, Volume dan Container sebagaimana perintah berikut:
 
-    $ docker network prune
+```bash
+$ docker network prune
 
-    $ docker volume prune
+$ docker volume prune
 
-    $ docker container prune
+$ docker container prune
+```
 
+Bisa juga menghapus seluruh image, network, volume, dan container yang tidak berjalan dengan perintah berikut:
+
+```bash
+$ sudo docker system prune --all --force
+```
